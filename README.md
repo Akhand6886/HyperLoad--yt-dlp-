@@ -24,3 +24,12 @@ You also need `ffmpeg` for merging video and audio streams:
 ### 2. Prepare Links
 Open `link.txt` and add the URLs you want to download (one per line). Lines starting with `#` are ignored.
 
+## 📂 Usage
+Run the downloader using the provided script:
+```bash
+python3 downloader.py
+```
+Or use the convenience script:
+```bash
+./run.sh
+`
