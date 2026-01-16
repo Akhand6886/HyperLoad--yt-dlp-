@@ -20,3 +20,7 @@ You also need `ffmpeg` for merging video and audio streams:
 - **macOS**: `brew install ffmpeg`
 - **Linux**: `sudo apt install ffmpeg`
 - **Windows**: Download from [ffmpeg.org](https://ffmpeg.org/download.html)
+
+### 2. Prepare Links
+Open `link.txt` and add the URLs you want to download (one per line). Lines starting with `#` are ignored.
+
