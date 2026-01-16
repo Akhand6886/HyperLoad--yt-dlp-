@@ -32,4 +32,12 @@ python3 downloader.py
 Or use the convenience script:
 ```bash
 ./run.sh
-`
+```
+
+All downloaded videos will be stored in the `downloads/` directory.
+
+## 📄 Files
+- `downloader.py`: The main Python script.
+- `link.txt`: Your list of URLs.
+- `downloads/`: Where your videos will be saved.
+- `run.sh`: Shortcut to run the downloader.
