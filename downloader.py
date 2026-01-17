@@ -124,6 +124,34 @@ def process_link(url: str):
     else:
         print(f"⚠️ Failed: {url}")
 
+def expand_links(links):
+    expanded = []
+    print(f"🔄 Resolving playlists and channels...")
+    for link in links:
+        cmd = ["yt-dlp", "--flat-playlist", "--print", "url", link]
+        proc = subprocess.run(cmd, capture_output=True, text=True)
+        if proc.returncode == 0:
+            urls = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+            if urls:
+                if len(urls) > 1:
+                    print(f"📑 Expanded '{link}' into {len(urls)} videos.")
+                expanded.extend(urls)
+            else:
+                expanded.append(link)
+        else:
+            # If yt-dlp fails to extract flat playlist, we keep the original link and let process_link handle it
+            expanded.append(link)
+    
+    # Remove duplicates while preserving order
+    seen = set()
+    unique_expanded = []
+    for u in expanded:
+        if u not in seen:
+            seen.add(u)
+            unique_expanded.append(u)
+            
+    return unique_expanded
+
 def main():
     check_ffmpeg()
     links = read_links(LINK_FILE)
@@ -131,6 +159,7 @@ def main():
         print("💡 Add YouTube links to 'link.txt' and run again.")
         return
 
+    links = expand_links(links)
     print(f"📂 Videos will be saved to: {DOWNLOAD_DIR.absolute()}")
     for idx, link in enumerate(links, start=1):
         print(f"\n--- Video {idx}/{len(links)} ---")
