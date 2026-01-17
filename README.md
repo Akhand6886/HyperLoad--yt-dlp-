@@ -4,6 +4,7 @@ A simple, high-quality batch downloader for YouTube and other supported sites us
 
 ## 🚀 Features
 - **Batch Processing**: Download multiple videos at once from a text file.
+- **Channel & Playlist Support**: Paste a channel or playlist link, and the script will automatically expand it and download all the videos.
 - **Maximum Quality**: Automatically selects the best video and audio streams and merges them.
 - **Dedicated Storage**: Saves all downloads into a `downloads/` folder.
 - **Error Handling**: Skips failed downloads and continues with the rest of the list.
