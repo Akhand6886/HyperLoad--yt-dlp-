@@ -51,8 +51,19 @@ def fetch_formats_json(url: str):
     if proc.returncode != 0:
         print(f"❌ yt-dlp failed to fetch info for {url}")
         return None
+    
+    output = proc.stdout.strip()
+    if not output:
+        print(f"⚠️ No information returned for {url}. yt-dlp might be outdated or the URL is restricted.")
+        return None
+        
     try:
-        return json.loads(proc.stdout)
+        # Handle multi-line JSON (common for unexpanded playlists)
+        lines = output.splitlines()
+        if len(lines) > 1:
+            print(f"ℹ️ URL contains multiple items. Processing the first one...")
+            return json.loads(lines[0])
+        return json.loads(output)
     except json.JSONDecodeError as e:
         print("❌ Failed to parse yt-dlp JSON output:", e)
         return None
@@ -128,18 +139,17 @@ def expand_links(links):
     expanded = []
     print(f"🔄 Resolving playlists and channels...")
     for link in links:
-        cmd = ["yt-dlp", "--flat-playlist", "--print", "url", link]
+        # Use --ignore-errors to prevent exit on minor issues
+        cmd = ["yt-dlp", "--flat-playlist", "--print", "url", "--ignore-errors", link]
         proc = subprocess.run(cmd, capture_output=True, text=True)
-        if proc.returncode == 0:
-            urls = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
-            if urls:
-                if len(urls) > 1:
-                    print(f"📑 Expanded '{link}' into {len(urls)} videos.")
-                expanded.extend(urls)
-            else:
-                expanded.append(link)
+        
+        urls = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+        if urls:
+            if len(urls) > 1:
+                print(f"📑 Expanded '{link}' into {len(urls)} videos.")
+            expanded.extend(urls)
         else:
-            # If yt-dlp fails to extract flat playlist, we keep the original link and let process_link handle it
+            # If no URLs found, keep the original link and let process_link handle it
             expanded.append(link)
     
     # Remove duplicates while preserving order
