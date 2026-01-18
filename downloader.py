@@ -21,7 +21,7 @@ from pathlib import Path
 
 # Configuration
 LINK_FILE = Path("link.txt")
-DOWNLOAD_DIR = Path("downloads")
+DOWNLOAD_DIR = Path("YouTube_Downloads")
 OUTPUT_TEMPLATE = str(DOWNLOAD_DIR / "%(title)s.%(ext)s")
 
 def check_ffmpeg():
