@@ -143,7 +143,7 @@ def expand_links(links):
         cmd = ["yt-dlp", "--flat-playlist", "--print", "url", "--ignore-errors", link]
         proc = subprocess.run(cmd, capture_output=True, text=True)
         
-        urls = [line.strip() for line in proc.stdout.splitlines() if line.strip()]
+        urls = [line.strip() for line in proc.stdout.splitlines() if line.strip() and line.strip() != "NA"]
         if urls:
             if len(urls) > 1:
                 print(f"📑 Expanded '{link}' into {len(urls)} videos.")
