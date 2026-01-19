@@ -46,7 +46,7 @@ def read_links(file_path: Path):
     return links
 
 def fetch_formats_json(url: str):
-    cmd = ["yt-dlp", "--dump-json", url]
+    cmd = ["yt-dlp", "--no-check-certificate", "--dump-json", url]
     proc = subprocess.run(cmd, capture_output=True, text=True)
     if proc.returncode != 0:
         print(f"❌ yt-dlp failed to fetch info for {url}")
@@ -105,6 +105,7 @@ def download_with_format(url: str, format_code: str):
     DOWNLOAD_DIR.mkdir(exist_ok=True)
     cmd = [
         "yt-dlp",
+        "--no-check-certificate",
         "-f",
         format_code,
         "--merge-output-format", "mp4",
@@ -140,7 +141,7 @@ def expand_links(links):
     print(f"🔄 Resolving playlists and channels...")
     for link in links:
         # Use --ignore-errors to prevent exit on minor issues
-        cmd = ["yt-dlp", "--flat-playlist", "--print", "url", "--ignore-errors", link]
+        cmd = ["yt-dlp", "--no-check-certificate", "--flat-playlist", "--print", "url", "--ignore-errors", link]
         proc = subprocess.run(cmd, capture_output=True, text=True)
         
         urls = [line.strip() for line in proc.stdout.splitlines() if line.strip() and line.strip() != "NA"]
